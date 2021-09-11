@@ -1,0 +1,13 @@
+######################################################
+# MESSAGES
+#
+# Use $ or & as Color Codes. See https://minecraft.fandom.com/wiki/Formatting_codes for further information.
+#
+# Placeholders
+# - {NUM_PLAYERS}: The amount of players.
+# - {MAX_PLAYERS}: The maximum amount of players.
+# - {PLAYER}: The players name. (context dependend)
+######################################################
+
+player_join: "{PLAYER} has entered the game. §r§f(§a{NUM_PLAYERS}§f/§c{MAX_PLAYERS}§f)"
+player_quit: "{PLAYER} has left the game. §r§f(§a{NUM_PLAYERS}§f/§c{MAX_PLAYERS}§f)"
