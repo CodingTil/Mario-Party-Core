@@ -9,5 +9,11 @@
 # - {PLAYER}: The players name. (context dependend)
 ######################################################
 
-player_join: "{PLAYER} has entered the game. §r§f(§a{NUM_PLAYERS}§f/§c{MAX_PLAYERS}§f)"
-player_quit: "{PLAYER} has left the game. §r§f(§a{NUM_PLAYERS}§f/§c{MAX_PLAYERS}§f)"
+lobby:
+  player_join: "{PLAYER} has entered the game. §r§f(§a{NUM_PLAYERS}§f/§c{MAX_PLAYERS}§f)"
+  player_quit: "{PLAYER} has left the game. §r§f(§a{NUM_PLAYERS}§f/§c{MAX_PLAYERS}§f)"
+
+game:
+  player_join: "{PLAYER} is now spectating the game."
+  player_rejoin: "{PLAYER} has rejoined the game."
+  player_quit: "{PLAYER} has left the game."

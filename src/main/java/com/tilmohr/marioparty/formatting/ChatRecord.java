@@ -12,6 +12,7 @@ public class ChatRecord {
 
 	public ChatRecord(@NotNull String message) {
 		this.message = message;
+		this.numPlayers = Bukkit.getOnlinePlayers().size();
 		this.maxPlayers = Bukkit.getMaxPlayers();
 	}
 

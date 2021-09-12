@@ -27,7 +27,7 @@ public final class ConfigurationFactory {
 	}
 
 	enum ConfigurationType {
-		DEFAULT("config"), MESSAGES("messages");
+		DEFAULT("config"), MESSAGES("messages"), WORLD("world");
 
 		private final String filename;
 

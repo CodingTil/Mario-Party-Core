@@ -3,14 +3,17 @@ package com.tilmohr.marioparty.formatting;
 import com.tilmohr.marioparty.App;
 
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class ChatFormatter {
 
 	App plugin;
 
-	public ChatFormatter(JavaPlugin plugin) {
-		this.plugin = (App) plugin;
+	public ChatFormatter(App plugin) {
+		this.plugin = plugin;
+	}
+
+	public String format(String message) {
+		return format(new ChatRecord(message));
 	}
 
 	public String format(ChatRecord chatRecord) {
@@ -20,6 +23,7 @@ public class ChatFormatter {
 		if (chatRecord.getPlayer() != null) {
 			message = message.replaceAll("\\{PLAYER\\}", chatRecord.getPlayer().getName());
 		}
-		return message;
+		return plugin.PREFIX + plugin.PREFIX_SEPERATOR + message;
 	}
+
 }

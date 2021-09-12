@@ -1,3 +1,31 @@
 decorations:
   prefix: "§6[§l§eMP§r§6]§r"
   prefix_seperator: "§8» §e"
+
+game:
+  min_players:
+
+# Special Fields
+#
+# Name: will be displayed to the player on the special field
+# Probability: that a field is the special field
+# Value: the amount of fields the player will jump forward / backward
+#
+# There is always the default field with value 0. You do not need to include it.
+special_fields:
+  lucky1:
+    name: "Lucky Field"
+    probability: 0.05
+    value: 2
+  lucky2:
+    name: "Lucky Field"
+    probability: 0.05
+    value: 2
+  bowser1:
+    name: "Bowser Field"
+    probability: 0.05
+    value: 2
+  bowser2:
+    name: "Bowser Field"
+    probability: 0.05
+    value: 2
