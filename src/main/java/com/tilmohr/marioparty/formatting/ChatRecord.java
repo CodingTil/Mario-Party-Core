@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class ChatRecord {
 	private final String message;
 	private int numPlayers;
@@ -50,6 +52,17 @@ public class ChatRecord {
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	@Override
+	public String toString() {
+		String msg = ChatColor.translateAlternateColorCodes('&', message);
+		msg = msg.replaceAll("\\{NUM_PLAYERS\\}", String.valueOf(numPlayers));
+		msg = msg.replaceAll("\\{MAX_PLAYERS\\}", String.valueOf(maxPlayers));
+		if (player != null) {
+			msg = msg.replaceAll("\\{PLAYER\\}", player.getName());
+		}
+		return msg;
 	}
 
 }

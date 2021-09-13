@@ -9,7 +9,7 @@ public class SimpleLogFormatter extends Formatter {
 
 	public String format(LogRecord logRecord) {
 		return "[" + new SimpleDateFormat("HH:mm:ss").format(new Date(logRecord.getMillis())) + " "
-				+ logRecord.getLevel() + "] " + logRecord.getMessage();
+				+ logRecord.getLevel() + "] " + logRecord.getMessage() + "\n";
 	}
 
 }

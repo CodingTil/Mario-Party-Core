@@ -2,6 +2,9 @@ decorations:
   prefix: "§6[§l§eMP§r§6]§r"
   prefix_seperator: "§8» §e"
 
+# If set to True, the game will not start, but administrators can join the server and configure the game (set spawn points, etc.)
+configurating: False
+
 game:
   min_players:
 
@@ -24,8 +27,8 @@ special_fields:
   bowser1:
     name: "Bowser Field"
     probability: 0.05
-    value: 2
+    value: -2
   bowser2:
     name: "Bowser Field"
     probability: 0.05
-    value: 2
+    value: -2

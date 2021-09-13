@@ -6,36 +6,25 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scheduler.BukkitRunnable;
 
-public class LobbyManager implements Listener {
+public class LobbyManager extends Manager {
 
-	private App plugin;
 	private GameWorld world;
-	private BukkitTask task;
+	private BukkitRunnable runnable;
 
-	public LobbyManager(App plugin, GameWorld world, BukkitTask task) {
-		this.plugin = plugin;
+	public LobbyManager(App plugin, GameWorld world, BukkitRunnable runnable) {
+		super(plugin);
 		this.world = world;
-		this.task = task;
-	}
-
-	public void registerEvents() {
-		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-	}
-
-	public void unregisterEvents() {
-		HandlerList.unregisterAll(this);
+		this.runnable = runnable;
 	}
 
 	@EventHandler
@@ -48,7 +37,7 @@ public class LobbyManager implements Listener {
 		p.teleport(world.getSpawn());
 		p.setGameMode(GameMode.ADVENTURE);
 
-		// TODO: Countdown + run task
+		// TODO: Countdown + run runnable
 	}
 
 	@EventHandler

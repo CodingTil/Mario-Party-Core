@@ -17,13 +17,7 @@ public class ChatFormatter {
 	}
 
 	public String format(ChatRecord chatRecord) {
-		String message = ChatColor.translateAlternateColorCodes('&', chatRecord.getMessage());
-		message = message.replaceAll("\\{NUM_PLAYERS\\}", String.valueOf(chatRecord.getNumPlayers()));
-		message = message.replaceAll("\\{MAX_PLAYERS\\}", String.valueOf(chatRecord.getMaxPlayers()));
-		if (chatRecord.getPlayer() != null) {
-			message = message.replaceAll("\\{PLAYER\\}", chatRecord.getPlayer().getName());
-		}
-		return plugin.PREFIX + plugin.PREFIX_SEPERATOR + message;
+		return plugin.PREFIX + plugin.PREFIX_SEPERATOR + chatRecord;
 	}
 
 }

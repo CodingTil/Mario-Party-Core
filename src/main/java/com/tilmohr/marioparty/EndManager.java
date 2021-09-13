@@ -13,20 +13,10 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
-public class EndManager implements Listener {
-
-	private App plugin;
+public class EndManager extends Manager {
 
 	public EndManager(App plugin) {
-		this.plugin = plugin;
-	}
-
-	public void registerEvents() {
-		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-	}
-
-	public void unregisterEvents() {
-		HandlerList.unregisterAll(this);
+		super(plugin);
 	}
 
 	@EventHandler

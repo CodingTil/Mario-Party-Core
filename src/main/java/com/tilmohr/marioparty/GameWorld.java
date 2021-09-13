@@ -1,11 +1,9 @@
 package com.tilmohr.marioparty;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
@@ -27,9 +25,8 @@ public class GameWorld {
 
 		this.world = Bukkit.getWorld(plugin.world.getString("world_name"));
 		if (this.world == null) {
-			plugin.getLogger().log(Level.SEVERE, plugin.formatter
-					.format("World " + plugin.world.getString("world_name") + " not found! Shutting down..."));
-			Bukkit.getPluginManager().disablePlugin(plugin);
+			plugin.getLogger().severe("World " + plugin.world.getString("world_name") + " not found! Shutting down...");
+			plugin.disablePlugin();
 			return;
 		}
 		this.world.setDifficulty(Difficulty.PEACEFUL);
@@ -49,9 +46,9 @@ public class GameWorld {
 
 			currentProbability += prob; // "Cumulative"
 			if (currentProbability > 1 || currentProbability < 0) {
-				plugin.getLogger().log(Level.SEVERE, plugin.formatter.format(
-						"The sum of probabilities of special_fields in config.yml must be in [0,1]. Also, no negative probabilities are allowed. Shutting down..."));
-				Bukkit.getPluginManager().disablePlugin(plugin);
+				plugin.getLogger().severe(
+						"The sum of probabilities of special_fields in config.yml must be in [0,1]. Also, no negative probabilities are allowed. Shutting down...");
+				plugin.disablePlugin();
 				return;
 			}
 
@@ -60,47 +57,50 @@ public class GameWorld {
 			list.add(name);
 			specialFieldRecords.putIfAbsent(currentProbability, list);
 
-			plugin.getLogger().info(plugin.formatter
-					.format("Found special field config: (" + value + ", " + prob + ", " + value + ")"));
+			plugin.getLogger().info("Found special field config: (" + name + ", " + prob + ", " + value + ")");
 		}
 
 		this.fields = new ArrayList<Field>();
 		for (String key : plugin.world.getConfigurationSection("fields").getKeys(false)) {
-			ConfigurationSection section = plugin.config.getConfigurationSection("fields." + key);
+			ConfigurationSection section = plugin.world.getConfigurationSection("fields." + key);
 			Location location = new Location(this.world, section.getDouble("spawn.x"), section.getDouble("spawn.y"),
-					section.getDouble("spawn.z"), section.getInt("spawn.pitch"), section.getInt("spawn.yaw"));
+					section.getDouble("spawn.z"));
 
 			double r = Math.random();
-			Double result = searchGaussianSortedMap(new ArrayList<>(specialFieldRecords.entrySet()), Double.valueOf(r));
-			Field field;
-			try {
-				if (Integer.parseInt(key) >= 0 && result != null && result != 0) {
-					ArrayList<Object> rList = specialFieldRecords.get(result);
-					field = new Field(location, (int) rList.get(0), (String) rList.get(1));
-				} else {
-					field = new Field(location, 0, "");
-				}
+			Double result = searchGaussianSortedMap(new ArrayList<>(specialFieldRecords.keySet()), Double.valueOf(r));
 
-				int index = this.fields.indexOf(field);
-				if (index != Integer.parseInt(key)) {
-					throw new NumberFormatException(); // Also handle this case the same way!
+			try {
+				Field field = new Field(location, 0, "", Integer.parseInt(key));
+				if (result != null && result != 0) {
+					ArrayList<Object> rList = specialFieldRecords.get(result);
+					if (rList != null) { // Shouldn't happen
+						field = new Field(location, (int) rList.get(0), (String) rList.get(1), Integer.parseInt(key));
+					} else {
+						plugin.getLogger().severe(
+								"This shouldn't happen! Contact a developer! (GameWorld.java: rList is null)\nShutting down...");
+						plugin.disablePlugin();
+						return;
+					}
 				}
 
 				this.fields.add(field);
-				plugin.getLogger().info(plugin.formatter
-						.format("Field nummer " + index + ": (" + field.name() + ", " + field.value() + ")"));
+				int index = this.fields.indexOf(field);
+
+				plugin.getLogger().info("Field nummer " + key + ": (" + field.name() + ", " + field.value() + ")");
+
+				if (index != Integer.parseInt(key)) {
+					throw new NumberFormatException(); // Also handle this case the same way!
+				}
 			} catch (NumberFormatException e) {
-				plugin.getLogger().log(Level.SEVERE,
-						plugin.formatter.format("Fields in world.yml are not correctly indexed. Shutting down..."));
+				plugin.getLogger().severe("Fields in world.yml are not correctly indexed. Shutting down...");
 				e.printStackTrace();
-				Bukkit.getPluginManager().disablePlugin(plugin);
+				plugin.disablePlugin();
 				return;
 			}
 		}
 		if (fields.size() < 6) {
-			plugin.getLogger().log(Level.SEVERE,
-					plugin.formatter.format("There must be a minimum of 6 Fields in world.yml. Shutting down..."));
-			Bukkit.getPluginManager().disablePlugin(plugin);
+			plugin.getLogger().severe("There must be a minimum of 6 Fields in world.yml. Shutting down...");
+			plugin.disablePlugin();
 			return;
 		}
 	}
@@ -114,23 +114,22 @@ public class GameWorld {
 	 * @param key      Key
 	 * @return Nearest upper value to key if exists, else null.
 	 */
-	private <K extends Comparable<K>, V> K searchGaussianSortedMap(ArrayList<Map.Entry<K, V>> entrySet, K key) {
+	private <K extends Comparable<K>> K searchGaussianSortedMap(ArrayList<K> entrySet, K key) {
 		if (entrySet == null || entrySet.isEmpty()) {
 			return null;
 		}
 		int index = (int) (entrySet.size() * 0.5);
-		Map.Entry<K, V> entry = entrySet.get(index);
-		if (entry.getKey().equals(key)) {
+		K entry = entrySet.get(index);
+		if (entry.equals(key)) {
 			return key;
 		}
-		if (entry.getKey().compareTo(key) < 0) {
-			return searchGaussianSortedMap(new ArrayList<Map.Entry<K, V>>(entrySet.subList(index + 1, entrySet.size())),
-					key);
+		if (entry.compareTo(key) < 0) {
+			return searchGaussianSortedMap(new ArrayList<K>(entrySet.subList(index + 1, entrySet.size())), key);
 		}
-		if (entry.getKey().compareTo(key) > 0) {
-			K result = searchGaussianSortedMap(new ArrayList<Map.Entry<K, V>>(entrySet.subList(0, index)), key);
+		if (entry.compareTo(key) > 0) {
+			K result = searchGaussianSortedMap(new ArrayList<K>(entrySet.subList(0, index)), key);
 			if (result == null || result.compareTo(key) > 0) {
-				return key;
+				return entry;
 			}
 			return result;
 		}

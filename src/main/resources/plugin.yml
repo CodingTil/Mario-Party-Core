@@ -2,4 +2,13 @@ main: com.tilmohr.marioparty.App
 name: marioparty
 version: 0.1
 api-version: 1.17
-prefix: ""
+prefix: null
+permissions:
+  marioparty.configure:
+    description: "Configuration permission"
+    default: op
+  marioparty.*:
+    description: "Wildcard permission"
+    default: op
+    children:
+      marioparty.configure: true

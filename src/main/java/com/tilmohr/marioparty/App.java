@@ -23,6 +23,8 @@ public class App extends JavaPlugin {
 
 	ChatFormatter formatter;
 
+	Manager manager;
+
 	@Override
 	public void onEnable() {
 		// Logger
@@ -48,12 +50,25 @@ public class App extends JavaPlugin {
 		PREFIX = config.getString("decorations.prefix");
 		PREFIX_SEPERATOR = config.getString("decorations.prefix_seperator");
 
-		getLogger().info("Hello, SpigotMC!");
+		if (config.getBoolean("configurating")) {
+			manager = new ConfigurationManager(this);
+			getLogger().info(formatter.format("Configuration Manager loaded."));
+		} else {
+			manager = new GameManager(this);
+			getLogger().info(formatter.format("Game Manager loaded."));
+		}
+
+		getLogger().info(formatter.format("Plugin started."));
+		manager.start();
 	}
 
 	@Override
 	public void onDisable() {
-		getLogger().info("See you again, SpigotMC!");
+		getLogger().info(formatter.format("Plugin is shutting down..."));
+	}
+
+	public void disablePlugin() {
+		getPluginLoader().disablePlugin(this);
 	}
 
 }

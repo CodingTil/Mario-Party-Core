@@ -17,3 +17,7 @@ game:
   player_join: "{PLAYER} is now spectating the game."
   player_rejoin: "{PLAYER} has rejoined the game."
   player_quit: "{PLAYER} has left the game."
+
+configurating:
+  player_join: "{PLAYER} has joined the game."
+  player_quit: "{PLAYER} has left the game."

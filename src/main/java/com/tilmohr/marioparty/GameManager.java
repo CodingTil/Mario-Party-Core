@@ -7,8 +7,6 @@ import com.tilmohr.marioparty.formatting.ChatRecord;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -17,10 +15,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 
-public class GameManager implements Listener {
-
-	private App plugin;
+public class GameManager extends Manager {
 
 	private GameWorld world;
 	private LobbyManager lobbyManager;
@@ -32,25 +30,31 @@ public class GameManager implements Listener {
 	boolean running;
 
 	public GameManager(App plugin) {
-		this.plugin = plugin;
+		super(plugin);
 		this.world = new GameWorld(plugin);
-		this.lobbyManager = new LobbyManager(plugin, world, Bukkit.getScheduler().runTaskLater(plugin, this::run, 1));
+		this.lobbyManager = new LobbyManager(plugin, world, new BukkitRunnable() {
+			@Override
+			public void run() {
+				runA();
+			}
+		});
 		this.endManager = new EndManager(plugin);
 		this.players = new ArrayList<>();
 		this.spectators = new ArrayList<>();
 		this.running = false;
 	}
 
+	@Override
 	public boolean start() {
 		if (running) {
 			return false;
 		}
 		running = true;
-		lobbyManager.registerEvents();
+		lobbyManager.start();
 		return true;
 	}
 
-	public void run() {
+	public void runA() {
 		lobbyManager.unregisterEvents();
 		registerEvents();
 		// TODO: TP to field 0
@@ -59,7 +63,8 @@ public class GameManager implements Listener {
 		// Minigame
 	}
 
-	public boolean end() {
+	@Override
+	public boolean stop() {
 		if (!running) {
 			return false;
 		}
@@ -67,14 +72,6 @@ public class GameManager implements Listener {
 		unregisterEvents();
 		endManager.registerEvents();
 		return true;
-	}
-
-	public void registerEvents() {
-		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-	}
-
-	public void unregisterEvents() {
-		HandlerList.unregisterAll(this);
 	}
 
 	@EventHandler
