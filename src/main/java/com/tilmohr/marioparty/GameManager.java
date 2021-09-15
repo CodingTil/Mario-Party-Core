@@ -55,8 +55,8 @@ public class GameManager extends Manager {
 	}
 
 	public void runA() {
-		lobbyManager.unregisterEvents();
-		registerEvents();
+		lobbyManager.unregister();
+		register();
 		// TODO: TP to field 0
 		// TODO: Entire Loop: Roll Dice -> TP Players -> Check Special Fields -> TP
 		// Players -> Select Minigame -> TP to Minigame -> Run Minigame -> TP back from
@@ -69,8 +69,8 @@ public class GameManager extends Manager {
 			return false;
 		}
 		running = false;
-		unregisterEvents();
-		endManager.registerEvents();
+		unregister();
+		endManager.register();
 		return true;
 	}
 

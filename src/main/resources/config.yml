@@ -3,7 +3,7 @@ decorations:
   prefix_seperator: "§8» §e"
 
 # If set to True, the game will not start, but administrators can join the server and configure the game (set spawn points, etc.)
-configurating: False
+configurating: True
 
 game:
   min_players:

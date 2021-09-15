@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ConfigurationFactory {
@@ -17,7 +15,7 @@ public final class ConfigurationFactory {
 			plugin.saveResource(type + ".yml", false);
 		}
 
-		FileConfiguration config = new YamlConfiguration();
+		FileConfiguration config = new FileConfiguration(file);
 		try {
 			config.load(file);
 		} catch (IOException | InvalidConfigurationException e) {

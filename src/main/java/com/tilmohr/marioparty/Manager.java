@@ -11,21 +11,21 @@ public abstract class Manager implements Listener {
 		this.plugin = plugin;
 	}
 
-	public void registerEvents() {
+	public void register() {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
-	public void unregisterEvents() {
+	public void unregister() {
 		HandlerList.unregisterAll(this);
 	}
 
 	public boolean start() {
-		registerEvents();
+		register();
 		return true;
 	};
 
 	public boolean stop() {
-		unregisterEvents();
+		unregister();
 		return true;
 	}
 }

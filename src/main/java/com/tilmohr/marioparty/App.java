@@ -9,7 +9,6 @@ import com.tilmohr.marioparty.ConfigurationFactory.ConfigurationType;
 import com.tilmohr.marioparty.formatting.ChatFormatter;
 import com.tilmohr.marioparty.formatting.SimpleLogFormatter;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class App extends JavaPlugin {
